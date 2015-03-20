@@ -244,7 +244,7 @@ class TreeController extends \BaseController {
 			//create
 // 			var_dump('create');
 
-			DB::beginTransaction();
+//			DB::beginTransaction();
 
 			if (!empty($input['photo'])) {
 				//location
@@ -373,7 +373,7 @@ class TreeController extends \BaseController {
 				$output['notes']['id'][] = $noteId;
 			}
 			
-			DB::commit();
+//			DB::commit();
 			
 // 			echo "<img alt=\"ic_launcher.jpg\"  src=\"data:image/jpg;base64,". $input['photo']['base64_image'] ." \" />";die;
 			
