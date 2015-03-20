@@ -57,7 +57,7 @@ return array(
 			'host'      => 'localhost',
 			'database'  => 'treetracker',
 			'username'  => 'root',
-			'password'  => '',
+			'password'  => 'fQNQJPpFHG',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
