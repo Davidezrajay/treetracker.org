@@ -7,7 +7,7 @@ class Photo extends Eloquent {
 
 	public function location()
 	{
-		return $this->hasOne('Location', 'id');
+		return $this->hasOne('Location', 'id', 'location_id');
 	}
 	
 	public function user()
