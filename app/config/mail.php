@@ -11,11 +11,11 @@ return array(
 	| sending of e-mail. You may specify which one you're using throughout
 	| your application here. By default, Laravel is setup for SMTP mail.
 	|
-	| Supported: "smtp", "mail", "sendmail"
+	| Supported: "smtp", "mail", "sendmail", "mailgun", "mandrill", "log"
 	|
 	*/
 
-	'driver' => 'sendmail',
+	'driver' => 'smtp',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -24,20 +24,20 @@ return array(
 	|
 	| Here you may provide the host address of the SMTP server used by your
 	| applications. A default option is provided that is compatible with
-	| the Postmark mail service, which will provide reliable delivery.
+	| the Mailgun mail service which will provide reliable deliveries.
 	|
 	*/
 
-	'host' => 'smtp.mailgun.org',
+	'host' => 'smtp.sendgrid.net',
 
 	/*
 	|--------------------------------------------------------------------------
 	| SMTP Host Port
 	|--------------------------------------------------------------------------
 	|
-	| This is the SMTP port used by your application to delivery e-mails to
-	| users of your application. Like the host we have set this value to
-	| stay compatible with the Postmark e-mail application by default.
+	| This is the SMTP port used by your application to deliver e-mails to
+	| users of the application. Like the host we have set this value to
+	| stay compatible with the Mailgun e-mail application by default.
 	|
 	*/
 
@@ -54,7 +54,7 @@ return array(
 	|
 	*/
 
-	'from' => array('address' => 'admin@treetracker.com', 'name' => 'TreeTracker'),
+        'from' => array('address' => 'admin@treetracker.com', 'name' => 'TreeTracker'),	
 
 	/*
 	|--------------------------------------------------------------------------
@@ -80,7 +80,7 @@ return array(
 	|
 	*/
 
-	'username' => null,
+	'username' => 'kplese',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -93,7 +93,7 @@ return array(
 	|
 	*/
 
-	'password' => null,
+	'password' => 'felsh1611',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -122,3 +122,4 @@ return array(
 	'pretend' => false,
 
 );
+	
