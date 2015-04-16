@@ -15,9 +15,18 @@ class HomeController extends BaseController {
 	|
 	*/
 
+	/**
+	 * @return Shows welcome screen containing Google Map popoulated with tree markers
+     */
 	public function showWelcome()
 	{
-		return View::make('hello');
+		//Return all the tree objects to view
+		return View::make('mainmap')->with('trees', Tree::all());
+	}
+
+	public function showTreeData($id){
+		//Returns tree data to the view. This is used in Google Maps infowindow
+		return View::make('treedata')->with('tree', Tree::find($id));
 	}
 
 }

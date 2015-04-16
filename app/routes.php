@@ -11,11 +11,8 @@
 | and give it the Closure to execute when that URI is requested.
 |
 */
-
-Route::get('/', function()
-{
-	return View::make('hello');
-});
+Route::get('/', 'HomeController@showWelcome');
+Route::get('/showtreedata/{id}', 'HomeController@showTreeData');
 
 Route::resource('users/signup', 'UserController@signup');
 Route::resource('users/login', 'UserController@login');
