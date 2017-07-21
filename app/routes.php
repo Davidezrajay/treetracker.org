@@ -19,8 +19,8 @@ Route::resource('users/login', 'UserController@login');
 Route::controller('password', 'RemindersController');
 
 
-Route::group(array('before' => 'token'), function()
-{
+//Route::group(array('before' => 'token'), function()
+//{
 	
 	Route::resource('users', 'UserController');
 	
@@ -32,10 +32,15 @@ Route::group(array('before' => 'token'), function()
 	Route::resource('trees', 'TreeController');
 	Route::resource('settings', 'SettingController');
 	Route::resource('trees/updates', 'TreeUpdatesController');
-	Route::resource('trees/updates/user', 'TreeUpdatesController@userPendingUpdates');
+	//Route::resource('trees/updates/user', 'TreeUpdatesController@userPendingUpdates');
+    Route::resource('trees/updates/user', 'TreeUpdatesController@testPendingUpdate');
+    Route::resource('trees/updates/test/user', 'TreeUpdatesController@testPendingUpdate');
 	Route::resource('trees/user', 'TreeController@getUserTrees');
+    Route::get('trees/show/all', 'TreeController@getTreesJson');
+
+
 // 	Route::delete('trees/updates/clear', 'TreeUpdatesController@clearPendingUpdates');
-});
+//});
 
 
 // Route::resource('users', 'UserController');
@@ -56,3 +61,6 @@ Route::group(array('before' => 'token'), function()
 // Route::resource('trees/updates', 'TreeUpdatesController');
 // Route::resource('trees/updates/user', 'TreeUpdatesController@userPendingUpdates');
 // Route::delete('trees/updates/clear', 'TreeUpdatesController@clearPendingUpdates');
+Route::resource('trees/details/user', 'TreeController2@getUserTreesDetailed');
+Route::resource('trees2/create', 'TreeController2@create');
+Route::resource('trees2/update', 'TreeController2@updateTree');
