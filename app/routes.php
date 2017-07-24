@@ -36,7 +36,7 @@ Route::controller('password', 'RemindersController');
     Route::resource('trees/updates/user', 'TreeUpdatesController@testPendingUpdate');
     Route::resource('trees/updates/test/user', 'TreeUpdatesController@testPendingUpdate');
 	Route::resource('trees/user', 'TreeController@getUserTrees');
-    Route::get('trees/show/all', 'TreeController@getTreesJson');
+    Route::resource('trees/json/all', 'TreeController@getTreesJson');
 
 
 // 	Route::delete('trees/updates/clear', 'TreeUpdatesController@clearPendingUpdates');

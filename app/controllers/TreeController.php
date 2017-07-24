@@ -264,12 +264,47 @@ class TreeController extends \BaseController
         }
         }
     }
-    
+  
+  /**
+   * @return string
+   */
     public function getTreesJson(){
   
       $trees = Tree::all();
       
-      return json_encode($trees);
+      $result=[];
+      
+      foreach ($trees as $tree){
+  
+        if (!$tree->dead) {
+          $photos = $tree->photos;
+          $notes = $tree->notes;
+          $location = $tree->primaryLocation;
+  
+          $photosList = [];
+          $treeNotesList=[];
+  
+          foreach ($photos as $photo) {
+            if (!$photo->outdated) {
+              
+              $photosList[] = (object)array("url" => $photo->id . '_thumb.jpg');
+            }
+          }
+  
+          foreach ($notes as $note) {
+            $treeNotesList[]=(object)array("content"=>$note->content, 'time_created' => $note->time_created);
+            
+          }
+  
+  
+          $result[] = (object)array("treeId"=>$tree->id,"lat" => $location->lat, "lon" => $location->lon, "photos" => $photosList,"notes"=>$treeNotesList);
+  
+  
+        
+        }
+      }
+      
+      return json_encode($result);
       
     }
 
