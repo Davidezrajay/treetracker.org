@@ -1,7 +1,7 @@
 <?php
 
 
-class TreeController extends \BaseController
+class TreeController2 extends \BaseController
 {
 
     private function base64_to_jpeg($base64_string, $output_file)
@@ -51,105 +51,207 @@ class TreeController extends \BaseController
     public function create()
     {
 
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
-    public function store()
-    {
-        //TODO we do not wan't to store, but to return trees on given input
-
         $input = Input::json()->all();
-        $output = array();
 
-        $treeIds = array();
+        $output = [];
 
-        if (isset($input['lat']) && isset($input['long']) && isset($input['radius'])) {
-            $lat = $latitude = $input['lat'];
-            $lon = $longitude = $input['long'];
-            $distance = $input['radius'];
-
-            //result is in meters
-
-            $query = "select id from trees where primary_location_id in
-					(SELECT id FROM (SELECT *,
-					((ACOS(SIN($lat * PI() / 180) * SIN(lat * PI() /
-					 180) + COS($lat * PI() / 180) * COS(lat * PI() / 180)
-					 * COS(($lon - lon) * PI() / 180)) * 180 / PI()) * 60 * 1.1515 * 1.609344 * 1000) 
-					AS distance FROM locations HAVING distance<=$distance) AS id)";
-
-            foreach (DB::select(DB::raw($query)) as $treeResObj) {
-                $tree = Tree::find($treeResObj->id);
-
-                $tree->primaryLocation;
-                $tree->settings;
-                $tree->overrideSettings;
-                $tree->notes;
-                $tree->photos;
-                $tree->users;
+        try {
+            DB::beginTransaction();
 
 
-                foreach ($tree->photos as $photo) {
-                    $photo->location;
-                }
+            //location
+            $location = new Location;
+            $location->lat = $input['lat'];
+            $location->lon = $input['long'];
+            $location->gps_accuracy = $input['gps_accuracy'];
+            $location->user_id = $input['user_id'];
+            $location->save();
 
-                $output[] = $tree->toArray();
+            Log::info("Location id:" . $location->id);
+            //date
+            $date = new DateTime();
+            $timestamp = $input['time_taken'];
+            $date->setTimestamp($timestamp);
+            $date_string = $date->format('Y-m-d H:i:s');
+            Log::info("Date:" . $date_string);
+            //photo
+            $photo = new Photo;
+            $photo->location_id = $location->id;
+            $photo->user_id = $input['user_id'];
+            //$date_string = $input['time_taken'];
+            $photo->time_taken = $date_string;
 
-            }
+            $photo->outdated = false;
+            $photo->save();
 
-        } else {
-            $error['error'] = "Invalid coordinates or radius given.";
-            return Response::json($error, 400);
+            Log::info("Photo id:" . $photo->id);
+            file_put_contents('images/' . $photo->id . '.jpg', base64_decode($input['base_64_image']));
+
+            $thumb = new Imagick();
+            $thumb->readImage('images/' . $photo->id . '.jpg');
+
+            $thumb->resizeImage(320, 240, Imagick::FILTER_LANCZOS, 1, true);
+            $thumb->writeImage('images/' . $photo->id . '_thumb.jpg');
+            $thumb->clear();
+            $thumb->destroy();
+
+
+            //primary location
+            $primaryLocation = new Location;
+            $primaryLocation->lat = $input['lat'];
+            $primaryLocation->lon = $input['long'];
+            $primaryLocation->gps_accuracy = $input['gps_accuracy'];
+            $primaryLocation->user_id = $input['user_id'];
+            $primaryLocation->save();
+
+
+            Log::info("PrimaryLocation id:" . $primaryLocation->id);
+
+
+            //settings
+            $settings = new Setting;
+            $settings->next_update = $input['time_to_update'];
+            $settings->min_gps_accuracy = $input['gps_accuracy'];
+            $settings->save();
+
+            Log::info("Settings id:" . $settings->id);
+
+            //override settings
+            $overrideSettings = new Setting;
+            $overrideSettings->next_update = $input['time_to_update'];
+            $overrideSettings->min_gps_accuracy = $input['gps_accuracy'];
+            $overrideSettings->save();
+
+            Log::info("Override id:" . $overrideSettings->id);
+
+            $tree = new Tree;
+
+
+            $tree->time_created = $date_string;
+            $tree->missing = false;
+
+
+            $tree->time_updated = $date_string;
+            $tree->cause_of_death_id = null;
+            $tree->user_id = $input['user_id'];
+            $tree->primary_location_id = $primaryLocation->id;
+            $tree->settings_id = $settings->id;
+            $tree->override_settings_id = $overrideSettings->id;
+            $tree->save();
+
+            $photoTree = new PhotoTree;
+            $photoTree->photo_id = $photo->id;
+            $photoTree->tree_id = $tree->id;
+            $photoTree->save();
+
+            $note = new Note();
+            $note->content = $input['note'];
+            $note->time_created = $date_string;
+            $note->user_id = $input['user_id'];
+            $note->save();
+
+            $noteTree = new NoteTree;
+            $noteTree->note_id = $note->id;
+            $noteTree->tree_id = $tree->id;
+            $noteTree->save();
+
+            DB::commit();
+            $output['status'] = $tree->id;
+        } catch (Exception $e) {
+
+            $output['status'] = 0;
+
+
         }
 
-        return Response::json($output);
+        return json_encode($output);
+
     }
 
     /**
-     * Display the specified resource.
+     * Show the form for creating a new resource.
      *
-     * @param  int $id
      * @return Response
      */
-    public function show($id)
+    public function updateTree()
     {
-        $tree = Tree::find($id);
 
-        if ($tree != null) {
-            $tree->primaryLocation;
-            $tree->settings;
-// 			$tree->overrideSettings;
-            $tree->notes;
-            $tree->users;
+        //try {
+            $input = Input::json()->all();
 
-            $output = $tree->toArray();
+            DB::beginTransaction();
 
-            $tempTree = Tree::find($id);
-            $tempTree->photos;
-            foreach ($tempTree->photos as $photo) {
-                if ($photo->outdated == '0') {
-                    try {
-                        $output['photo'] = $photo->location->toArray();
-                        $output['photo']['base64_image'] = base64_encode(file_get_contents('images/' . $photo->id . '_thumb.jpg'));
-                    } catch (Exception $e) {
-                        unset($output['photo']);
+            $objTree = Tree::find(($input['id']));
+
+            $objTree->dead = $input['dead'];
+            $objTree->missing = $input['missing'];
+            $objTree->priority = 0;
+            Log::info("Time updated:" . $input['time_taken'] . " END");
+            $date = new DateTime();
+            $timestamp = $input['time_taken'];
+            $date->setTimestamp($timestamp);
+            $date_string = $date->format('Y-m-d H:i:s');
+            $objTree->time_updated = $date_string;
+
+            //Photos
+            if (isset($input['base_64_image'])) {
+                $photos = $objTree->photos;
+
+                foreach ($photos as $photo) {
+                    if (!$photo->outdated) {
+
+                        $photo->outdated = 1;
+                        $photo->save();
                     }
-
                 }
             }
 
+            $location=$objTree->primaryLocation;
+            Log::info("Update location id:" .$location->id);
+            //Store new photo
 
-        } else {
-            $error['error'] = "Invalid tree ID.";
-            return Response::json($error, 400);
-        }
+            $photo = new Photo;
+            $photo->location_id = $location->id;
+            $photo->user_id = $input['user_id'];
+            $photo->time_taken = $date_string;
+
+            $photo->outdated = false;
+            $photo->save();
+
+        $photoTree = new PhotoTree;
+        $photoTree->photo_id = $photo->id;
+        $photoTree->tree_id = $objTree->id;
+        $photoTree->save();
+
+            Log::info("Photo id:" . $photo->id);
+            file_put_contents('images/' . $photo->id . '.jpg', base64_decode($input['base_64_image']));
+
+            $thumb = new Imagick();
+            $thumb->readImage('images/' . $photo->id . '.jpg');
+
+            $thumb->resizeImage(320, 240, Imagick::FILTER_LANCZOS, 1, true);
+            $thumb->writeImage('images/' . $photo->id . '_thumb.jpg');
+            $thumb->clear();
+            $thumb->destroy();
+
+            //Add notes and image
+            $output = [];
+
+            $objTree->save();
+            DB::commit();
+
+            $output['status'] = 1;
+        /*} catch (Exception $e) {
+
+            $output['status'] = 0;
 
 
-        return Response::json($output);
+        }*/
+
+        return json_encode($output);
+
     }
+
 
     /**
      * Display the specified resource.
@@ -164,9 +266,9 @@ class TreeController extends \BaseController
         $output = array();
 
         foreach ($trees as $tree) {
-            if (!$tree->missing) {
-                $treeObj=[];
-                $treeObj['id']  = $tree->id;
+            if (!$tree->missing && !$tree->dead) {
+                $treeObj = [];
+                $treeObj['id'] = $tree->id;
                 $treeObj['created'] = $tree->time_created;
                 $treeObj['updated'] = $tree->time_updated;
                 $treeObj['priority'] = $tree->priority;
@@ -175,14 +277,11 @@ class TreeController extends \BaseController
                 $treeObj['lat'] = $location->lat;
                 $treeObj['lng'] = $location->lon;
 
-                $settings=  $tree->settings;
+                $settings = $tree->settings;
                 $treeObj['gps'] = $settings->min_gps_accuracy;
                 $treeObj['next_update'] = $settings->next_update;
 
                 $photos = $tree->photos;
-
-
-
                 $url = "";
                 foreach ($photos as $photo) {
                     if (!$photo->outdated) {
@@ -191,8 +290,9 @@ class TreeController extends \BaseController
                     }
                 }
 
+
                 $treeObj['imageUrl'] = $url;
-                array_push($output,$treeObj);
+                array_push($output, $treeObj);
             }
         }
 
@@ -225,8 +325,7 @@ class TreeController extends \BaseController
         $trees = Tree::all();
 
         foreach ($trees as $tree) {
-            if (!$tree->dead){
-                $photos = $tree->photos;
+            $photos = $tree->photos;
             $notes = $tree->notes;
             $location = $tree->primaryLocation;
 
@@ -261,63 +360,10 @@ class TreeController extends \BaseController
             echo $mapsUrl;
             echo '</div>';
 
+
         }
-        }
-    }
-  
-  /**
-   * @return string
-   */
-    public function getTreesJson(){
-  
-      $trees = Tree::all();
-      
-      $result=[];
-      
-      foreach ($trees as $tree){
-  
-        if (!$tree->dead) {
-          $photos = $tree->photos;
-          $notes = $tree->notes;
-          $location = $tree->primaryLocation;
-  
-          $photosList = [];
-          $treeNotesList=[];
-  
-          foreach ($photos as $photo) {
-            if (!$photo->outdated) {
-              
-              $photosList[] = (object)array("url" => $photo->id . '_thumb.jpg');
-            }
-          }
-  
-          foreach ($notes as $note) {
-            $treeNotesList[]=(object)array("content"=>$note->content, 'time_created' => $note->time_created);
-            
-          }
-  
-  
-          $result[] = (object)array("treeId"=>$tree->id,"lat" => $location->lat, "lon" => $location->lon, "photos" => $photosList,"notes"=>$treeNotesList);
-  
-  
-        
-        }
-      }
-      
-      return json_encode($result);
-      
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.

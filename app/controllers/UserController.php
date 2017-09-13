@@ -72,7 +72,7 @@ class UserController extends \BaseController {
 		try {
 			$user->save();
 		} catch (Exception $e) {
-			$error['error'] = "Duplicate entry on email.";
+			$error['error'] = $e->getMessage();
 			return Response::json($error, 409);
 		}
 		

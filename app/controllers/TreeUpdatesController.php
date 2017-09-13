@@ -309,6 +309,49 @@ class TreeUpdatesController extends \BaseController {
 		var_dump($input);die;
 		
 	}
+
+
+	/**
+	 * Display the specified resources for the user.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function testPendingUpdate($id){
+
+
+		$pendingUpdates = DB::table('trees')->where('user_id', '=', $id)->get();
+
+		$updates = array();
+		if ($pendingUpdates != null){
+
+			foreach ($pendingUpdates as $pendingUpdate){
+
+
+				//"update_type": "tree"
+				if ($pendingUpdate->priority == '1') {
+					$parent = [];
+					$update = [];
+					$update['update_type'] = 'tree';
+					$update['id'] = $pendingUpdate->id;
+					$update['main_db_id'] = $pendingUpdate->id;
+					array_push($parent,$update);
+					array_push($updates,$parent);
+					unset($update);
+				}
+
+
+			}
+
+
+			return Response::json($updates);
+
+		} else {
+			$error['error'] = "No pending updates.";
+			return Response::json($error, 400);
+		}
+
+	}
 	
 	/**
 	 * Display the specified resource.

@@ -54,7 +54,7 @@
             <span><b>Last updated on </b><br>{{$tree->time_updated}}</span>
         </div>
         <div class="col-lg-3">
-            <span><b>Tree is <?php if($tree->missing == 0) echo "not" ?> missing</b></span>
+            <span><b>Tree is <?php if($tree->missing == 0) echo "not" ?> missing.</br>Tree is <?php if($tree->dead == 0) echo "not" ?> dead. </b></span>
         </div>
         <div class="col-lg-3">
             <span><b>GPS accuracy of the tree location is {{$tree->primaryLocation->gps_accuracy}} meters</b></span>
