@@ -15,3 +15,8 @@
 9. Load database from file 
 	1. mysql -u username -p databasename < setup/snapshot.sql
 7. php artisan serve
+
+
+## Contributing
+
+Please submit pull requests against the master branch at https://github.com/Greenstand/treetracker.org
