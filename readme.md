@@ -27,3 +27,7 @@ Please submit pull requests against the master branch at https://github.com/Gree
 Come find us on IRC at #treetracker
 
 Use https://webchat.freenode.net/ or chat client of your choice!
+
+## Roadmap
+
+Implement and test endpoints, or reimplement this simple PHP API in another language (such as Ruby on Rails)
