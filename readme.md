@@ -22,3 +22,6 @@
 ## Contributing
 
 Please submit pull requests against the master branch at https://github.com/Greenstand/treetracker.org
+
+Come find us on IRC at #treetracker
+Use https://webchat.freenode.net/ or chat client of your choice!
