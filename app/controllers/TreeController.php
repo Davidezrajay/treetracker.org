@@ -1,7 +1,7 @@
 <?php
 
 
-class TreeController2 extends \BaseController
+class TreeController extends \BaseController
 {
 
     private function base64_to_jpeg($base64_string, $output_file)
@@ -58,11 +58,10 @@ class TreeController2 extends \BaseController
         try {
             DB::beginTransaction();
 
-
             //location
             $location = new Location;
             $location->lat = $input['lat'];
-            $location->lon = $input['long'];
+            $location->lon = $input['lon'];
             $location->gps_accuracy = $input['gps_accuracy'];
             $location->user_id = $input['user_id'];
             $location->save();
@@ -70,7 +69,7 @@ class TreeController2 extends \BaseController
             Log::info("Location id:" . $location->id);
             //date
             $date = new DateTime();
-            $timestamp = $input['time_taken'];
+            $timestamp = $input['timestamp'];
             $date->setTimestamp($timestamp);
             $date_string = $date->format('Y-m-d H:i:s');
             Log::info("Date:" . $date_string);
@@ -78,7 +77,6 @@ class TreeController2 extends \BaseController
             $photo = new Photo;
             $photo->location_id = $location->id;
             $photo->user_id = $input['user_id'];
-            //$date_string = $input['time_taken'];
             $photo->time_taken = $date_string;
 
             $photo->outdated = false;
@@ -99,44 +97,21 @@ class TreeController2 extends \BaseController
             //primary location
             $primaryLocation = new Location;
             $primaryLocation->lat = $input['lat'];
-            $primaryLocation->lon = $input['long'];
+            $primaryLocation->lon = $input['lon'];
             $primaryLocation->gps_accuracy = $input['gps_accuracy'];
             $primaryLocation->user_id = $input['user_id'];
             $primaryLocation->save();
 
-
             Log::info("PrimaryLocation id:" . $primaryLocation->id);
 
-
-            //settings
-            $settings = new Setting;
-            $settings->next_update = $input['time_to_update'];
-            $settings->min_gps_accuracy = $input['gps_accuracy'];
-            $settings->save();
-
-            Log::info("Settings id:" . $settings->id);
-
-            //override settings
-            $overrideSettings = new Setting;
-            $overrideSettings->next_update = $input['time_to_update'];
-            $overrideSettings->min_gps_accuracy = $input['gps_accuracy'];
-            $overrideSettings->save();
-
-            Log::info("Override id:" . $overrideSettings->id);
-
-            $tree = new Tree;
-
-
+						$tree = new Tree;
             $tree->time_created = $date_string;
             $tree->missing = false;
-
 
             $tree->time_updated = $date_string;
             $tree->cause_of_death_id = null;
             $tree->user_id = $input['user_id'];
             $tree->primary_location_id = $primaryLocation->id;
-            $tree->settings_id = $settings->id;
-            $tree->override_settings_id = $overrideSettings->id;
             $tree->save();
 
             $photoTree = new PhotoTree;
@@ -159,7 +134,7 @@ class TreeController2 extends \BaseController
             $output['status'] = $tree->id;
         } catch (Exception $e) {
 
-            $output['status'] = 0;
+            $output['status'] = $e->getMessage() . ' ' . $e->getTraceAsString();
 
 
         }
@@ -390,7 +365,7 @@ class TreeController2 extends \BaseController
                 //location
                 $location = new Location;
                 $location->lat = $input['photo']['location']['lat'];
-                $location->lon = $input['photo']['location']['long'];
+                $location->lon = $input['photo']['location']['lon'];
                 $location->gps_accuracy = $input['photo']['location']['gps_accuracy'];
                 $location->user_id = $input['user_id'];
                 $location->save();
@@ -422,7 +397,7 @@ class TreeController2 extends \BaseController
             //primary location
             $primaryLocation = new Location;
             $primaryLocation->lat = $input['primary_location']['lat'];
-            $primaryLocation->lon = $input['primary_location']['long'];
+            $primaryLocation->lon = $input['primary_location']['lon'];
             $primaryLocation->gps_accuracy = $input['primary_location']['gps_accuracy'];
             $primaryLocation->user_id = $input['user_id'];
             $primaryLocation->save();
@@ -527,7 +502,7 @@ class TreeController2 extends \BaseController
                 //location
                 $location = new Location;
                 $location->lat = $input['photo']['location']['lat'];
-                $location->lon = $input['photo']['location']['long'];
+                $location->lon = $input['photo']['location']['lon'];
                 $location->gps_accuracy = $input['photo']['location']['gps_accuracy'];
                 $location->user_id = $input['user_id'];
                 $location->save();

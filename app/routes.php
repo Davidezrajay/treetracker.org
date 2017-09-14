@@ -22,6 +22,6 @@ Route::resource('users/signup', 'UserController@signup');
 Route::resource('users/login', 'UserController@login');
 Route::controller('password', 'RemindersController');
 
-Route::resource('trees/details/user', 'TreeController2@getUserTreesDetailed');
-Route::resource('trees2/create', 'TreeController2@create');
-Route::resource('trees2/update', 'TreeController2@updateTree');
+Route::resource('trees/details/user', 'TreeController@getUserTreesDetailed');
+Route::resource('trees/create', 'TreeController@create');
+Route::resource('trees/update', 'TreeController@updateTree');
