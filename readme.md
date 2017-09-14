@@ -14,7 +14,7 @@
 8. Migrations aren't configured, so don't execute php artisan migrate
 9. Load database from file 
 	1. mysql -u username -p databasename < setup/snapshot.sql
-7. php artisan serve
+7. cd public; php ../artisan serve
 
 
 ## Contributing
