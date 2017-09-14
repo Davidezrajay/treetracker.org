@@ -7,6 +7,7 @@
     <script type="text/javascript"
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLHZL7-3Y5aNMlW_Cz5G1NyBn5R0Mmurs">
     </script>
+    {{ HTML::script('js/jquery-2.1.3.min.js');}}
     {{ HTML::script('js/markerclusterer.js') }}
     <script type="text/javascript">
         var map = undefined;//Google Map object
@@ -65,8 +66,6 @@
 
         google.maps.event.addDomListener(window, 'load', initialize);
     </script>
-
-    {{HTML::script('js/jquery-2.1.3.min.js');}}
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
