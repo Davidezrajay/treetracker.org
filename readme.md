@@ -2,7 +2,9 @@
 
 ## Set up a local development environment on MacOSX
 
-1. Install php with mcrypt (  brew install homebrew/php/php56-mcrypt )
+1. Install php with mcrypt, imagick
+	1.  brew install homebrew/php/php56-mcrypt
+	2.  brew install homebrew/php/php56-imagick
 1. Install composer ( https://getcomposer.org/doc/00-intro.md )
 2. Install laravel using: php composer.phar global require "laravel/installer"
 3. Install mysql
