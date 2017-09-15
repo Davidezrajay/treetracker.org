@@ -11,6 +11,7 @@ Upload images to cloud object storage and integrate URLS with API
 UI Fixes and Updates
 Repackage with new key
 Implement RPC for stream upload/downloading trees
+Remove remind to sync
 
 ### Web
 Design and Implement an Awesome web map background
@@ -70,6 +71,7 @@ Data quality / linking tree updates to correct tree using GPS
 
 ### Android
 Money earned counter for the planter
+Whitelabel deployments
 
 ### Link to mobile money
 
