@@ -73,7 +73,7 @@ Money earned counter for the planter
 
 ### Link to mobile money
 
-#### Link donations to individual trees or groups of trees
+### Link donations to individual trees or groups of trees
 
-#### Advanced GIS features and Data Analysis
+### Advanced GIS features and Data Analysis
 
