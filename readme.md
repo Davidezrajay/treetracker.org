@@ -31,3 +31,7 @@ Use https://webchat.freenode.net/ or chat client of your choice!
 ## Roadmap
 
 Implement and test endpoints, or reimplement this simple PHP API in another language (such as Ruby on Rails)
+
+## License
+
+This project is licensed under the GNU AGPL version 3, see https://github.com/Greenstand/treetracker.org/blob/master/LICENSE
