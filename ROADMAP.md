@@ -5,7 +5,7 @@ This project coordinates tree planting employment for people living in extreme p
 ## Immediate Development Targets (Core Functionality)
 
 ### Android
-+Integrate with API
++ Integrate with API
 +Fix GPS Location Tracking
 +Upload images to cloud object storage and integrate URLS with API
 +UI Fixes and Updates
