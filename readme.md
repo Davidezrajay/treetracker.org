@@ -30,7 +30,7 @@ Use https://webchat.freenode.net/ or chat client of your choice!
 
 ## Roadmap
 
-Implement and test endpoints, or reimplement this simple PHP API in another language (such as Ruby on Rails)
+https://github.com/Greenstand/treetracker.org/blob/master/ROADMAP.md
 
 ## License
 
