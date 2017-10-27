@@ -6,9 +6,13 @@ This project coordinates tree planting employment for people living in extreme p
 
 ### Android
 + Integrate with API
+
 ~~+ Fix GPS Location Tracking~~
+
 + Upload images to cloud object storage and integrate URLS with API (**Underway**)
+
 ~~+ UI Fixes and Updates~~
+
 + Repackage with new key
 + Implement RPC for stream upload/downloading trees
 + Remove remind to sync
