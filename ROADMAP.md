@@ -20,8 +20,8 @@ This project coordinates tree planting employment for people living in extreme p
 ### Web
 + Design and Implement an Awesome web map background (**Underway**)
 + Switch to JSONP endpoints
-+ Design location markers, etc
-+ Tweak for embedding in other platforms
++ Design location markers, etc (**Underway**)
++ Tweak for embedding in other platforms (**Underway**)
 + Stylize dialog
 
 ### API
@@ -48,6 +48,7 @@ This project coordinates tree planting employment for people living in extreme p
 ### Embed maps in external websites
 + Filter by project / organizations
 + Filter by region
++ Filter by date
 
 ### Donor Panel 
 + Map
@@ -82,4 +83,6 @@ This project coordinates tree planting employment for people living in extreme p
 ### Link donations to individual trees or groups of trees
 
 ### Advanced GIS features and Data Analysis
+
+### Species recognition
 
