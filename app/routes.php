@@ -20,6 +20,7 @@ Route::get('/showtreedata/{id}', 'MapController@showTreeData');
 // API
 Route::resource('users/signup', 'UserController@signup');
 Route::resource('users/login', 'UserController@login');
+Route::resource('users/forgot', 'UserController@forgot');
 Route::controller('password', 'RemindersController');
 
 Route::resource('trees/details/user', 'TreeController@getUserTreesDetailed');
