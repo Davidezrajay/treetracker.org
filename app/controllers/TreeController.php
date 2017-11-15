@@ -252,9 +252,9 @@ class TreeController extends \BaseController
                 $treeObj['lat'] = $location->lat;
                 $treeObj['lng'] = $location->lon;
 
-                $settings = $tree->settings;
-                $treeObj['gps'] = $settings->min_gps_accuracy;
-                $treeObj['next_update'] = $settings->next_update;
+                //$settings = $tree->settings;
+               	// $treeObj['gps'] = $settings->min_gps_accuracy;
+                //$treeObj['next_update'] = $settings->next_update;
 
                 $photos = $tree->photos;
                 $url = "";
