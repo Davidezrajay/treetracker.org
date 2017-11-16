@@ -52,16 +52,19 @@
         //Initialize Google Maps and Marker Clusterer
         var initialize = function() {
             var mapOptions = {
-                zoom: 4
+              zoom: 4,
+              mapTypeId: 'hybrid'
             }
             map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-
             initMarkers();
 
-            var mcOptions = {gridSize: 50, maxZoom: 15};
+            var mcOptions = {gridSize: 50, maxZoom: 13};
             mc = new MarkerClusterer(map, markers, mcOptions);
 
-            map.fitBounds(markerBounds);
+            map.setCenter({lat: -3.263960, lng: 36.624882});
+            map.setZoom(15);
+
+            //map.fitBounds(markerBounds);
         }
 
         google.maps.event.addDomListener(window, 'load', initialize);
