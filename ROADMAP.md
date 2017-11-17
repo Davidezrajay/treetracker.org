@@ -15,6 +15,7 @@ This project coordinates tree planting employment for people living in extreme p
 
 + Repackage with new key
 + Implement RPC for stream upload/downloading trees
+
 ~~+ Remove remind to sync ~~
 
 ### Web
